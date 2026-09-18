@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: var(--studio-bg);
+  --color-surface: var(--studio-surface);
+  --color-elevated: var(--studio-elevated);
+  --color-fg: var(--studio-fg);
+  --color-muted: var(--studio-muted);
+  --color-faint: var(--studio-faint);
+  --color-lime: var(--studio-accent);
+  --color-ink: var(--studio-ink);
+  --color-line: color-mix(in oklab, var(--studio-accent) 18%, transparent);
+  --color-gold: #e2b657;
+  --color-gold-ink: #1a1408;
+  --color-atrium: #12100c;
+  --color-atrium-surface: #1b1812;
+  --color-atrium-line: color-mix(in oklab, #e2b657 18%, transparent);
+
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+}
+
+:root {
+  --studio-bg: #070807;
+  --studio-surface: #111412;
+  --studio-elevated: #1a1f1a;
+  --studio-fg: #f3f4ef;
+  --studio-muted: #9aa394;
+  --studio-faint: #5c6358;
+  --studio-accent: #c6ff1a;
+  --studio-ink: #111411;
+  color-scheme: dark;
+}
+
+[data-app="atrium"] {
+  --studio-bg: #12100c;
+  --studio-surface: #1b1812;
+  --studio-elevated: #241f18;
+  --studio-fg: #f3f4ef;
+  --studio-muted: #a89a82;
+  --studio-faint: #6f6554;
+  --studio-accent: #e2b657;
+  --studio-ink: #1a1408;
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  html,
+  body,
+  #app {
+    min-height: 100%;
+    background: var(--studio-bg);
+    color: var(--studio-fg);
+    overflow-x: clip;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    line-height: 1.55;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+.portrait-theme {
+  transition: filter 220ms ease;
+}
+html[data-theme="volt"] .portrait-theme {
+  filter: saturate(1.08) contrast(1.04);
+}
+html[data-theme="tide"] .portrait-theme {
+  filter: hue-rotate(18deg) saturate(1.08) contrast(1.03);
+}
+html[data-theme="ember"] .portrait-theme {
+  filter: hue-rotate(-26deg) saturate(1.12) contrast(1.03);
+}
+html[data-theme="paper"] .portrait-theme {
+  filter: saturate(0.9) contrast(1.06) brightness(1.03);
+}
+html[data-theme="night"] .portrait-theme {
+  filter: saturate(0.28) contrast(1.1);
+}
+
+.studio-cursor-ring,
+.studio-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  pointer-events: none;
+  display: none;
+  will-change: transform;
+}
+.studio-cursor-ring {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--studio-accent) 62%, transparent);
+  background: color-mix(in oklab, var(--studio-accent) 10%, transparent);
+}
+.studio-cursor-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--studio-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.has-studio-cursor .studio-cursor-ring,
+  html.has-studio-cursor .studio-cursor-dot {
+    display: block;
+  }
+  html.has-studio-cursor,
+  html.has-studio-cursor * {
+    cursor: none !important;
+  }
+}
+
+@utility font-serif {
+  font-family: var(--font-serif);
+}
+
+@utility font-mono {
+  font-family: var(--font-mono);
+}
