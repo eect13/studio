@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { markFaviconHref } from "@/lib/mark";
 
 export const THEMES = {
   volt: {
@@ -108,8 +107,6 @@ export function applyTheme(id: ThemeId) {
   root.style.colorScheme = t.scheme;
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute("content", t.bg);
-  const icon = document.querySelector('link[rel="icon"]');
-  if (icon) icon.setAttribute("href", markFaviconHref(t.accent));
 }
 
 export function parseCssHex(value: string, fallback = 0xc6ff1a) {

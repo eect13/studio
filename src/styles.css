@@ -165,6 +165,21 @@ html[data-theme="night"] .portrait-theme {
   grid-template-columns: 1fr;
 }
 
+.mark-frame {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 5;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in oklab, var(--studio-accent) 18%, transparent);
+  border-radius: var(--radius-md);
+  background: var(--studio-bg);
+}
+.mark-frame svg {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+}
+
 @media (min-width: 768px) {
   .work-bento {
     grid-template-columns: repeat(12, minmax(0, 1fr));
