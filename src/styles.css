@@ -101,6 +101,10 @@
   }
 }
 
+.hero-glow {
+  text-shadow: 0 0 80px color-mix(in oklab, var(--color-lime) 28%, transparent);
+}
+
 .portrait-theme {
   transition: filter 220ms ease;
 }

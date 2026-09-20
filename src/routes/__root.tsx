@@ -16,7 +16,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Multimedia arts graduate in the Philippines. Logos, vector identity, 3D prints, and local-first tools.",
+          "Multimedia arts graduate in the Philippines. One personal mark, beginner 3D prints, and local-first tools I actually use.",
       },
       { name: "theme-color", content: "#070807" },
     ],

@@ -1,9 +1,15 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { parseCssHex, useStudioTheme } from "@/lib/theme";
+import { parseCssHex, THEMES, useStudioTheme } from "@/lib/theme";
+
+type SceneApi = {
+  mats: Array<THREE.LineBasicMaterial | THREE.MeshBasicMaterial | THREE.PointsMaterial>;
+  scene: THREE.Scene;
+};
 
 export function SceneCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const apiRef = useRef<SceneApi | null>(null);
   const theme = useStudioTheme((s) => s.theme);
 
   useEffect(() => {
@@ -11,9 +17,9 @@ export function SceneCanvas() {
     if (!canvas) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const styles = getComputedStyle(document.documentElement);
-    const accent = parseCssHex(styles.getPropertyValue("--studio-accent"));
-    const bg = parseCssHex(styles.getPropertyValue("--studio-bg"), 0x070807);
+    const t0theme = THEMES[useStudioTheme.getState().theme];
+    const accent = parseCssHex(t0theme.accent);
+    const bg = parseCssHex(t0theme.bg, 0x070807);
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -21,7 +27,7 @@ export function SceneCanvas() {
       alpha: true,
       powerPreference: "high-performance",
     });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setSize(window.innerWidth, window.innerHeight, false);
     renderer.setClearColor(0x000000, 0);
 
@@ -54,7 +60,7 @@ export function SceneCanvas() {
     const inner = new THREE.Mesh(innerGeo, innerMat);
     group.add(inner);
 
-    const count = window.innerWidth < 700 ? 1200 : 2400;
+    const count = window.innerWidth < 700 ? 700 : 1400;
     const positions = new Float32Array(count * 3);
     const seeds = new Float32Array(count);
     for (let i = 0; i < count; i++) {
@@ -79,12 +85,14 @@ export function SceneCanvas() {
     const particles = new THREE.Points(pGeo, pMat);
     scene.add(particles);
 
+    apiRef.current = { mats: [icoMat, innerMat, pMat], scene };
+
     const pointer = new THREE.Vector2(0, 0);
     const onPointer = (e: PointerEvent) => {
       pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
       pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
     };
-    window.addEventListener("pointermove", onPointer);
+    window.addEventListener("pointermove", onPointer, { passive: true });
 
     let scrollY = window.scrollY;
     const onScroll = () => {
@@ -141,13 +149,19 @@ export function SceneCanvas() {
       renderer.render(scene, camera);
     };
 
+    const onVis = () => {
+      renderer.setAnimationLoop(document.hidden ? null : animate);
+    };
+    document.addEventListener("visibilitychange", onVis);
     renderer.setAnimationLoop(animate);
 
     return () => {
       renderer.setAnimationLoop(null);
+      document.removeEventListener("visibilitychange", onVis);
       window.removeEventListener("pointermove", onPointer);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
+      apiRef.current = null;
       icoGeo.dispose();
       wire.dispose();
       icoMat.dispose();
@@ -157,6 +171,16 @@ export function SceneCanvas() {
       pMat.dispose();
       renderer.dispose();
     };
+  }, []);
+
+  useEffect(() => {
+    const api = apiRef.current;
+    if (!api) return;
+    const t = THEMES[theme];
+    const accent = parseCssHex(t.accent);
+    const bg = parseCssHex(t.bg, 0x070807);
+    for (const mat of api.mats) mat.color.setHex(accent);
+    api.scene.fog = new THREE.FogExp2(bg, 0.045);
   }, [theme]);
 
   return (
