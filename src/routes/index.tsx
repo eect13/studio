@@ -1,8 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { ExternalLink, Github, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { Mark } from "@/components/mark";
 import { SceneCanvas } from "@/components/scene-canvas";
-import { SceneSwitcher } from "@/components/scene-switcher";
 import { StudioCursor } from "@/components/studio-cursor";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,6 @@ const WORK = [
     tags: ["TypeScript", "Tauri 2", "Local-first"],
     github: "https://github.com/eect13/atrium",
     live: "https://atrium-swart-seven.vercel.app",
-    demo: "/atrium" as const,
   },
   {
     id: "font",
@@ -82,14 +81,12 @@ function Home() {
       />
 
       <header className="fixed inset-x-0 top-0 z-40 flex items-center gap-2 bg-gradient-to-b from-bg/90 to-transparent px-4 py-3 sm:px-8">
-        <a href="#top" className="mr-auto flex min-w-0 items-center gap-3">
-          <span className="grid size-9 shrink-0 place-items-center rounded-[10px] border border-dashed border-lime font-sans text-xs font-bold tracking-wide text-lime">
-            EE
-          </span>
+        <a href="#top" className="mr-auto flex min-w-0 items-center gap-3" aria-label="Eric Emerson Studio">
+          <Mark className="h-10 w-9 shrink-0" />
           <span className="hidden flex-col leading-tight sm:flex">
             <strong className="text-sm font-semibold">Eric Emerson</strong>
             <small className="font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
-              Logo placeholder
+              Studio
             </small>
           </span>
         </a>
@@ -101,7 +98,6 @@ function Home() {
           ))}
         </nav>
         <ThemeSwitcher />
-        <SceneSwitcher className="hidden lg:flex" />
         <button
           type="button"
           className="grid size-11 shrink-0 place-items-center rounded-md text-fg xl:hidden"
@@ -119,7 +115,6 @@ function Home() {
               {item.label}
             </a>
           ))}
-          <SceneSwitcher className="sm:hidden" />
         </div>
       ) : null}
 
@@ -144,9 +139,6 @@ function Home() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
               <a href="#work">See the work</a>
-            </Button>
-            <Button asChild variant="ghost">
-              <Link to="/atrium">Launch Atrium</Link>
             </Button>
           </div>
         </section>
@@ -234,11 +226,6 @@ function Home() {
                     <ExternalLink className="size-4" />
                     Live
                   </a>
-                  {"demo" in item && item.demo ? (
-                    <Button asChild variant="ghost">
-                      <Link to={item.demo}>Desk here</Link>
-                    </Button>
-                  ) : null}
                 </div>
               </article>
             ))}
@@ -350,7 +337,7 @@ function Home() {
 
       <footer className="relative z-10 flex flex-wrap justify-between gap-3 border-t border-line px-4 py-6 font-mono text-[11px] uppercase tracking-[0.12em] text-faint sm:px-8">
         <span>© 2026 Eric Emerson Tan</span>
-        <span>Mark is a placeholder · Three.js scene</span>
+        <span>All rights reserved</span>
       </footer>
     </div>
   );

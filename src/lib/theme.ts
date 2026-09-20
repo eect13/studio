@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { markFaviconHref } from "@/lib/mark";
 
 export const THEMES = {
   volt: {
@@ -67,29 +68,16 @@ export const THEMES = {
 export type ThemeId = keyof typeof THEMES;
 export const THEME_IDS = Object.keys(THEMES) as ThemeId[];
 
-export const SCENES = {
-  orbit: { label: "Orbit" },
-  lattice: { label: "Lattice" },
-  ribbon: { label: "Ribbon" },
-} as const;
-
-export type SceneId = keyof typeof SCENES;
-export const SCENE_IDS = Object.keys(SCENES) as SceneId[];
-
 type ThemeStore = {
   theme: ThemeId;
-  scene: SceneId;
   setTheme: (id: ThemeId) => void;
-  setScene: (id: SceneId) => void;
 };
 
 export const useStudioTheme = create<ThemeStore>()(
   persist(
     (set) => ({
       theme: "volt",
-      scene: "orbit",
       setTheme: (id) => set({ theme: id }),
-      setScene: (id) => set({ scene: id }),
     }),
     {
       name: "studio.theme",
@@ -99,7 +87,6 @@ export const useStudioTheme = create<ThemeStore>()(
           ...current,
           ...p,
           theme: p.theme && p.theme in THEMES ? p.theme : current.theme,
-          scene: p.scene && p.scene in SCENES ? p.scene : current.scene,
         };
       },
     },
@@ -121,6 +108,8 @@ export function applyTheme(id: ThemeId) {
   root.style.colorScheme = t.scheme;
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute("content", t.bg);
+  const icon = document.querySelector('link[rel="icon"]');
+  if (icon) icon.setAttribute("href", markFaviconHref(t.accent));
 }
 
 export function parseCssHex(value: string, fallback = 0xc6ff1a) {
