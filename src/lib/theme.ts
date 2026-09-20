@@ -65,21 +65,43 @@ export const THEMES = {
 } as const;
 
 export type ThemeId = keyof typeof THEMES;
-
 export const THEME_IDS = Object.keys(THEMES) as ThemeId[];
+
+export const SCENES = {
+  orbit: { label: "Orbit" },
+  lattice: { label: "Lattice" },
+} as const;
+
+export type SceneId = keyof typeof SCENES;
+export const SCENE_IDS = Object.keys(SCENES) as SceneId[];
 
 type ThemeStore = {
   theme: ThemeId;
+  scene: SceneId;
   setTheme: (id: ThemeId) => void;
+  setScene: (id: SceneId) => void;
 };
 
 export const useStudioTheme = create<ThemeStore>()(
   persist(
     (set) => ({
       theme: "volt",
+      scene: "orbit",
       setTheme: (id) => set({ theme: id }),
+      setScene: (id) => set({ scene: id }),
     }),
-    { name: "studio.theme" },
+    {
+      name: "studio.theme",
+      merge: (persisted, current) => {
+        const p = (persisted ?? {}) as Partial<ThemeStore>;
+        return {
+          ...current,
+          ...p,
+          theme: p.theme && p.theme in THEMES ? p.theme : current.theme,
+          scene: p.scene && p.scene in SCENES ? p.scene : current.scene,
+        };
+      },
+    },
   ),
 );
 
