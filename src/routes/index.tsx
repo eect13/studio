@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Github, Menu, X } from "lucide-react";
+import { ExternalLink, Github, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { SceneCanvas } from "@/components/scene-canvas";
 import { SceneSwitcher } from "@/components/scene-switcher";
@@ -19,37 +19,49 @@ const NAV = [
 
 const WORK = [
   {
+    id: "atrium",
     n: "01",
     kicker: "Command center",
+    version: "1.2.28",
     title: "Atrium",
     body: "Local-first personal desk — calendar with ICS, sticky notes, PSE-aware finance, weather, and a briefing. No account. Data stays on the machine.",
     tags: ["TypeScript", "Tauri 2", "Local-first"],
     github: "https://github.com/eect13/atrium",
+    live: "https://atrium-swart-seven.vercel.app",
     demo: "/atrium" as const,
   },
   {
+    id: "font",
     n: "02",
     kicker: "Desktop type",
+    version: "1.0.202",
     title: "Font Manager",
     body: "FontBase-style Windows library. Browse Google Fonts, upload TTF/OTF, activate faces so Word, Adobe, and Figma see them for the session.",
     tags: ["Tauri 2", "React", "Rust"],
     github: "https://github.com/eect13/font-manager",
+    live: "https://font-manager-eta.vercel.app",
   },
   {
+    id: "finance",
     n: "03",
     kicker: "Treasury books",
+    version: "3.63.56",
     title: "Finance Manager",
     body: "Desktop and browser ledger — banks, invoices, employees, and a bank register. Books stay on this computer. Pacific Harbor sample ships with it.",
     tags: ["Tauri 2", "IndexedDB", "TypeScript"],
     github: "https://github.com/eect13/finance-manager",
+    live: "https://finance-manager-phi-self.vercel.app",
   },
   {
+    id: "potion",
     n: "04",
     kicker: "Folder for apps",
+    version: "1.2.0",
     title: "Potion",
     body: "A folder for your apps. Login optional. Sync only if you want it. Guest files stay on the device — Windows, Android, or the browser.",
     tags: ["Tauri 2", "Windows", "Android"],
     github: "https://github.com/eect13/potion",
+    live: "https://potion-red.vercel.app",
   },
 ];
 
@@ -89,7 +101,7 @@ function Home() {
           ))}
         </nav>
         <ThemeSwitcher />
-        <SceneSwitcher className="hidden sm:flex" />
+        <SceneSwitcher className="hidden lg:flex" />
         <button
           type="button"
           className="grid size-11 shrink-0 place-items-center rounded-md text-fg xl:hidden"
@@ -184,13 +196,17 @@ function Home() {
         <section id="work" className="mx-auto max-w-6xl px-4 py-20 sm:px-8 sm:py-24">
           <SectionHead idx="02" title="Selected work" />
           <p className="mb-8 max-w-xl text-muted">
-            Tools I actually use. Source lives on GitHub — Atrium also runs here as a live desk.
+            Latest cuts from GitHub, running on Vercel. Named CSS grid on desktop — Atrium and Potion take the wide cells.
           </p>
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="work-bento">
             {WORK.map((item) => (
-              <article key={item.title} className="flex flex-col rounded-xl border border-line bg-surface/90 p-6">
+              <article
+                key={item.id}
+                data-work={item.id}
+                className="flex min-h-[16rem] flex-col rounded-xl border border-line bg-surface/90 p-6"
+              >
                 <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-lime">
-                  {item.n} · {item.kicker}
+                  {item.n} · {item.kicker} · v{item.version}
                 </p>
                 <h3 className="mb-2 text-2xl font-semibold tracking-tight">{item.title}</h3>
                 <p className="text-muted">{item.body}</p>
@@ -209,9 +225,18 @@ function Home() {
                     <Github className="size-4" />
                     GitHub
                   </a>
+                  <a
+                    className="inline-flex min-h-11 items-center gap-2 border-b border-faint text-sm text-muted hover:border-lime hover:text-lime"
+                    href={item.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ExternalLink className="size-4" />
+                    Live
+                  </a>
                   {"demo" in item && item.demo ? (
                     <Button asChild variant="ghost">
-                      <Link to={item.demo}>Open demo</Link>
+                      <Link to={item.demo}>Desk here</Link>
                     </Button>
                   ) : null}
                 </div>

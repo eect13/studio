@@ -155,6 +155,25 @@ html[data-theme="night"] .portrait-theme {
   }
 }
 
+.work-bento {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .work-bento {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-areas:
+      "atrium atrium atrium atrium atrium atrium atrium font font font font font"
+      "finance finance finance finance finance potion potion potion potion potion potion potion";
+  }
+  .work-bento > [data-work="atrium"] { grid-area: atrium; }
+  .work-bento > [data-work="font"] { grid-area: font; }
+  .work-bento > [data-work="finance"] { grid-area: finance; }
+  .work-bento > [data-work="potion"] { grid-area: potion; }
+}
+
 @utility font-serif {
   font-family: var(--font-serif);
 }

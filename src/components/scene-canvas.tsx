@@ -27,11 +27,11 @@ export function SceneCanvas() {
     renderer.setClearColor(0x000000, 0);
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(bg, sceneId === "lattice" ? 0.032 : 0.045);
+    scene.fog = new THREE.FogExp2(bg, sceneId === "lattice" ? 0.032 : sceneId === "ribbon" ? 0.038 : 0.045);
 
     const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 80);
     if (sceneId === "lattice") camera.position.set(0, 8.4, 11.2);
-    else camera.position.set(0, 0, 9);
+    else camera.position.set(0, 0, sceneId === "ribbon" ? 10.5 : 9);
 
     const pointer = new THREE.Vector2(0, 0);
     const onPointer = (e: PointerEvent) => {
@@ -60,7 +60,53 @@ export function SceneCanvas() {
 
     let animate: () => void;
 
-    if (sceneId === "lattice") {
+    if (sceneId === "ribbon") {
+      const ribbonCount = 5;
+      const segs = 160;
+      const lines: { attr: THREE.BufferAttribute; seeds: number }[] = [];
+      for (let k = 0; k < ribbonCount; k++) {
+        const geo = new THREE.BufferGeometry();
+        const arr = new Float32Array(segs * 3);
+        const attr = new THREE.BufferAttribute(arr, 3);
+        geo.setAttribute("position", attr);
+        const mat = new THREE.LineBasicMaterial({
+          color: accent,
+          transparent: true,
+          opacity: 0.22 + k * 0.1,
+        });
+        const line = new THREE.Line(geo, mat);
+        scene.add(line);
+        geos.push(geo);
+        mats.push(mat);
+        lines.push({ attr, seeds: k * 1.17 });
+      }
+
+      animate = () => {
+        const t = (performance.now() - t0) / 1000;
+        const docH = Math.max(document.body.scrollHeight - window.innerHeight, 1);
+        const doc = Math.min(scrollY / docH, 1);
+        for (let k = 0; k < ribbonCount; k++) {
+          const { attr, seeds } = lines[k];
+          const arr = attr.array as Float32Array;
+          const speed = 0.35 + k * 0.11;
+          const amp = 3.2 + k * 0.38;
+          for (let i = 0; i < segs; i++) {
+            const u = i / (segs - 1);
+            const a = u * Math.PI * 5 + t * speed + seeds;
+            const pull = Math.sin(u * Math.PI);
+            arr[i * 3] = Math.sin(a) * amp + pointer.x * 2.1 * pull;
+            arr[i * 3 + 1] =
+              Math.sin(a * 0.62 + k) * 1.55 + Math.cos(u * 7 + t * 0.9) * 0.42 + pointer.y * 1.2 * pull;
+            arr[i * 3 + 2] = Math.cos(a * 0.48) * 2.4 - u * 2.2 + doc * 0.6;
+          }
+          attr.needsUpdate = true;
+        }
+        camera.position.x += (pointer.x * 0.9 - camera.position.x) * 0.04;
+        camera.position.y += (pointer.y * 0.45 - camera.position.y) * 0.04;
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+      };
+    } else if (sceneId === "lattice") {
       const cols = window.innerWidth < 700 ? 14 : 20;
       const rows = window.innerWidth < 700 ? 10 : 14;
       const count = cols * rows;

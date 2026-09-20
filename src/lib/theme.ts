@@ -70,6 +70,7 @@ export const THEME_IDS = Object.keys(THEMES) as ThemeId[];
 export const SCENES = {
   orbit: { label: "Orbit" },
   lattice: { label: "Lattice" },
+  ribbon: { label: "Ribbon" },
 } as const;
 
 export type SceneId = keyof typeof SCENES;

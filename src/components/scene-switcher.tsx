@@ -8,7 +8,7 @@ export function SceneSwitcher({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "flex h-11 shrink-0 items-center rounded-full border border-line bg-surface/80 px-1 backdrop-blur-md",
+        "flex h-11 shrink-0 items-center overflow-x-auto rounded-full border border-line bg-surface/80 px-1 backdrop-blur-md",
         className,
       )}
       role="radiogroup"
