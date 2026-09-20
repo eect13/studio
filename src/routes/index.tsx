@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ExternalLink, Github, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Mark } from "@/components/mark";
-import { MarkProcess } from "@/components/mark-process";
 import { SceneCanvas } from "@/components/scene-canvas";
 import { StudioCursor } from "@/components/studio-cursor";
 import { ThemeSwitcher } from "@/components/theme-switcher";
@@ -143,10 +142,10 @@ function Home() {
           <div className="grid overflow-hidden rounded-xl border border-line bg-surface/90 md:grid-cols-[minmax(0,280px)_1fr] lg:grid-cols-[minmax(0,320px)_1fr]">
             <figure className="relative flex items-end justify-center px-5 pt-8 md:px-6 md:pt-10">
               <img
-                src="/portrait.png?v=5"
+                src="/portrait.png?v=6"
                 alt="Eric Emerson Tan, geometric vector portrait"
-                width={1100}
-                height={1624}
+                width={1152}
+                height={1709}
                 className="portrait-theme relative z-[1] mx-auto h-auto max-h-72 w-full max-w-[220px] object-contain object-bottom sm:max-h-96 sm:max-w-[260px] md:max-h-[28rem] md:max-w-none"
                 crossOrigin="anonymous"
                 decoding="async"
@@ -187,7 +186,7 @@ function Home() {
 
           <article
             data-work="mark"
-            className="mb-5 grid items-start gap-6 rounded-xl border border-line bg-surface/90 p-6 sm:grid-cols-[minmax(0,160px)_1fr] sm:p-8"
+            className="mb-5 grid items-center gap-6 rounded-xl border border-line bg-surface/90 p-6 sm:grid-cols-[minmax(0,160px)_1fr] sm:p-8"
           >
             <Mark className="mx-auto h-32 w-28 sm:h-40 sm:w-36" />
             <div>
@@ -203,9 +202,6 @@ function Home() {
                 <Tag>SVG</Tag>
                 <Tag>Ambigram</Tag>
               </div>
-            </div>
-            <div className="sm:col-span-2">
-              <MarkProcess />
             </div>
           </article>
 

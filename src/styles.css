@@ -121,7 +121,7 @@ html[data-theme="paper"] .portrait-theme {
   filter: saturate(0.9) contrast(1.06) brightness(1.03);
 }
 html[data-theme="night"] .portrait-theme {
-  filter: saturate(0.28) contrast(1.1);
+  filter: saturate(0.55) contrast(1.06);
 }
 
 .studio-cursor-ring,
@@ -163,21 +163,6 @@ html[data-theme="night"] .portrait-theme {
   display: grid;
   gap: 1.25rem;
   grid-template-columns: 1fr;
-}
-
-.mark-frame {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 4 / 5;
-  padding: 1.25rem;
-  border: 1px solid color-mix(in oklab, var(--studio-accent) 18%, transparent);
-  border-radius: var(--radius-md);
-  background: var(--studio-bg);
-}
-.mark-frame svg {
-  height: 100%;
-  width: auto;
-  max-width: 100%;
 }
 
 @media (min-width: 768px) {
