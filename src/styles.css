@@ -215,47 +215,32 @@ html[data-theme="night"] .portrait-theme {
 .study-fill {
   fill: currentColor;
   stroke: none;
-  opacity: 0.06;
+  opacity: 0.07;
 }
 
+.study-guide,
 .study-line {
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.35;
+  stroke-width: 2.4;
   stroke-linejoin: round;
   stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: study-draw 26s cubic-bezier(0.45, 0, 0.2, 1) infinite;
-  animation-delay: -8s;
+  shape-rendering: geometricPrecision;
 }
 
-.study-flip {
-  opacity: 0.42;
-  animation-delay: -9s;
+.study-guide {
+  opacity: 0.16;
 }
 
-@keyframes study-draw {
-  0% { stroke-dashoffset: 1; }
-  42% { stroke-dashoffset: 0; }
-  68% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: -1; }
-}
-
-html.study-paused .mark-study,
-html.study-paused .mark-study * {
-  animation-play-state: paused;
+.study-line {
+  opacity: 0.9;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .study-line,
   .live-pip {
     animation: none !important;
-    stroke-dashoffset: 0 !important;
   }
-  .study-line { opacity: 0.28; }
-  .study-flip { opacity: 0.16 !important; }
+  .study-line { opacity: 0.45; }
 }
 
 @utility font-serif {
