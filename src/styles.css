@@ -167,15 +167,117 @@ html[data-theme="night"] .portrait-theme {
 
 @media (min-width: 768px) {
   .work-bento {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-template-areas:
-      "atrium atrium atrium atrium atrium atrium atrium font font font font font"
-      "finance finance finance finance finance potion potion potion potion potion potion potion";
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
-  .work-bento > [data-work="atrium"] { grid-area: atrium; }
-  .work-bento > [data-work="font"] { grid-area: font; }
-  .work-bento > [data-work="finance"] { grid-area: finance; }
-  .work-bento > [data-work="potion"] { grid-area: potion; }
+  .work-bento > article {
+    grid-column: span 2;
+  }
+  .work-bento > [data-work="atrium"],
+  .work-bento > [data-work="court"] {
+    grid-column: span 3;
+  }
+}
+
+.live-pip {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--studio-accent);
+  box-shadow: 0 0 0 0 color-mix(in oklab, var(--studio-accent) 55%, transparent);
+  animation: live-pulse 2.4s ease-out infinite;
+}
+
+@keyframes live-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--studio-accent) 50%, transparent); }
+  100% { box-shadow: 0 0 0 7px transparent; }
+}
+
+.trim-field {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  color: var(--studio-accent);
+}
+
+.trim-sheet {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.trim-corner {
+  position: absolute;
+  width: min(30vw, 210px);
+  height: auto;
+  overflow: visible;
+}
+.trim-corner.tl { top: 4.25rem; left: 0.75rem; }
+.trim-corner.tr { top: 4.25rem; right: 0.75rem; transform: scaleX(-1); }
+.trim-corner.bl { bottom: 0.75rem; left: 0.75rem; transform: scaleY(-1); }
+.trim-corner.br { right: 0.75rem; bottom: 0.75rem; transform: scale(-1); }
+
+.trim-field path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.15;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  vector-effect: non-scaling-stroke;
+}
+
+.trim-stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: trim-draw 16s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+}
+
+.trim-stroke-dim {
+  opacity: 0.45;
+}
+
+.trim-swap {
+  transform-box: fill-box;
+}
+
+.trim-a {
+  animation: trim-fade 32s ease-in-out infinite;
+}
+.trim-b {
+  animation: trim-fade 32s ease-in-out infinite;
+  animation-delay: -16s;
+}
+
+@keyframes trim-draw {
+  0% { stroke-dashoffset: 1; }
+  38% { stroke-dashoffset: 0; }
+  70% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -1; }
+}
+
+@keyframes trim-fade {
+  0%, 6% { opacity: 0; }
+  16%, 42% { opacity: 0.72; }
+  54%, 100% { opacity: 0; }
+}
+
+html.trim-paused .trim-field,
+html.trim-paused .trim-field * {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trim-stroke,
+  .trim-a,
+  .trim-b,
+  .live-pip {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .trim-a { opacity: 0.62 !important; }
+  .trim-b { opacity: 0 !important; }
 }
 
 @utility font-serif {

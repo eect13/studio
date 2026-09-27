@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ExternalLink, Github, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Mark } from "@/components/mark";
 import { SceneCanvas } from "@/components/scene-canvas";
 import { StudioCursor } from "@/components/studio-cursor";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import { TrimField } from "@/components/trim-field";
 import { Button } from "@/components/ui/button";
+import { seedCards, type ProjectCard } from "@/lib/projects";
+import { refreshProjects } from "@/lib/projects-live";
 
 export const Route = createFileRoute("/")({ component: Home });
 
@@ -17,60 +20,30 @@ const NAV = [
   { href: "#hello", label: "Say hello" },
 ];
 
-const WORK = [
-  {
-    id: "atrium",
-    n: "01",
-    kicker: "Personal desk",
-    version: "1.2.28",
-    title: "Atrium",
-    body: "A local-first desk I built to use: calendar, notes, weather, a briefing. No account. Data stays on the machine.",
-    tags: ["TypeScript", "Tauri 2"],
-    github: "https://github.com/eect13/atrium",
-    live: "https://atrium-swart-seven.vercel.app",
-  },
-  {
-    id: "font",
-    n: "02",
-    kicker: "Type on Windows",
-    version: "1.0.202",
-    title: "Font Manager",
-    body: "A library so I can browse Google Fonts, drop in a TTF, and have Word or Figma see it for the session. Still learning the edges.",
-    tags: ["Tauri 2", "React"],
-    github: "https://github.com/eect13/font-manager",
-    live: "https://font-manager-eta.vercel.app",
-  },
-  {
-    id: "finance",
-    n: "03",
-    kicker: "Household books",
-    version: "3.63.56",
-    title: "Finance Manager",
-    body: "Desktop and browser ledger for banks and invoices. Books stay here. A sample company ships with it so I can test without real money.",
-    tags: ["Tauri 2", "IndexedDB"],
-    github: "https://github.com/eect13/finance-manager",
-    live: "https://finance-manager-phi-self.vercel.app",
-  },
-  {
-    id: "potion",
-    n: "04",
-    kicker: "A folder for apps",
-    version: "1.2.0",
-    title: "Potion",
-    body: "A place to keep small apps. Login optional. Guest files stay on the device — Windows, Android, or the browser.",
-    tags: ["Tauri 2", "Windows"],
-    github: "https://github.com/eect13/potion",
-    live: "https://potion-red.vercel.app",
-  },
-];
-
 function Home() {
   const [open, setOpen] = useState(false);
+  const [work, setWork] = useState<ProjectCard[]>(() => seedCards());
+  const [synced, setSynced] = useState(false);
+
+  useEffect(() => {
+    let stop = false;
+    refreshProjects()
+      .then((result) => {
+        if (stop || !result?.cards?.length) return;
+        setWork(result.cards);
+        setSynced(result.synced);
+      })
+      .catch(() => {});
+    return () => {
+      stop = true;
+    };
+  }, []);
 
   return (
     <div className="relative min-h-svh overflow-x-clip bg-bg text-fg">
       <StudioCursor />
       <SceneCanvas />
+      <TrimField />
       <div
         className="pointer-events-none fixed inset-0 z-[1] opacity-[0.07]"
         style={{
@@ -128,7 +101,7 @@ function Home() {
             <span className="hero-glow block text-lime">Emerson</span>
           </h1>
           <p className="mt-7 max-w-md text-muted">
-            Learning identity, small local-first tools, and a printer. I under-promise on purpose.
+            One personal mark. A few tools I open myself. A printer I am still learning. I under-promise on purpose.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
@@ -160,13 +133,15 @@ function Home() {
                 <em className="font-serif font-normal italic text-lime">cleaner</em> than yesterday.
               </h3>
               <p className="mb-3 text-muted">
-                Multimedia Arts graduate, working from home. I have one ambigram: the hourglass mark
-                in the header. That’s my personal logo — not a client set, not a studio roster.
+                Multimedia Arts graduate, working from home in the Philippines. I have one ambigram:
+                the hourglass in the header. That is my personal logo. Not a client set, and not a
+                studio roster.
               </p>
               <p className="text-muted">
-                I write small tools because I need them. I practice SVG. I run a Creality K2 Pro as a
-                beginner: test prints, bad slicer settings, and all. The version numbers in the work
-                list are just the apps I keep shipping.
+                The tools are things I open myself. Atrium is the desk, on Manila time. CourtWire is
+                a fantasy basketball sheet for the 2026–27 season — I am still learning the numbers.
+                I practice SVG. I run a Creality K2 Pro as a beginner: test prints, bad slicer
+                settings, and scrap. Version numbers below are just what those apps say today.
               </p>
               <ul className="mt-6 grid grid-cols-2 gap-4 text-sm">
                 <Fact label="Identity" value="One mark — mine" />
@@ -181,7 +156,9 @@ function Home() {
         <section id="work" className="mx-auto max-w-6xl px-4 py-20 sm:px-8 sm:py-24">
           <SectionHead idx="02" title="Selected work" />
           <p className="mb-8 max-w-xl text-muted">
-            One identity piece. Four tools I actually use. Versions from GitHub.
+            One identity piece. Five things I actually open. Public versions refresh from GitHub
+            when this page loads.
+            {synced ? " Checked just now." : " Showing the last versions I saved, until the check finishes."}
           </p>
 
           <article
@@ -195,8 +172,8 @@ function Home() {
               </p>
               <h3 className="mb-2 text-2xl font-semibold tracking-tight">Hourglass</h3>
               <p className="text-muted">
-                One ambigram. Eye as counter, e in the lens. That’s the identity work so far — not a
-                branding practice, just the logo I live with.
+                One ambigram. Eye as counter, e in the lens. That is the identity work so far — the
+                logo I live with, not a branding practice.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <Tag>SVG</Tag>
@@ -206,7 +183,7 @@ function Home() {
           </article>
 
           <div className="work-bento">
-            {WORK.map((item) => (
+            {work.map((item) => (
               <article
                 key={item.id}
                 data-work={item.id}
@@ -223,24 +200,40 @@ function Home() {
                   ))}
                 </div>
                 <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-5">
-                  <a
-                    className="inline-flex min-h-11 items-center gap-2 border-b border-faint text-sm text-muted hover:border-lime hover:text-lime"
-                    href={item.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Github className="size-4" />
-                    GitHub
-                  </a>
-                  <a
-                    className="inline-flex min-h-11 items-center gap-2 border-b border-faint text-sm text-muted hover:border-lime hover:text-lime"
-                    href={item.live}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ExternalLink className="size-4" />
-                    Live
-                  </a>
+                  {item.github ? (
+                    <a
+                      className="inline-flex min-h-11 items-center gap-2 border-b border-faint text-sm text-muted hover:border-lime hover:text-lime"
+                      href={item.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Github className="size-4" />
+                      GitHub
+                    </a>
+                  ) : (
+                    <span className="inline-flex min-h-11 items-center font-mono text-[10px] uppercase tracking-[0.12em] text-faint">
+                      Private repo
+                    </span>
+                  )}
+                  {item.live && item.liveOk ? (
+                    <a
+                      className="inline-flex min-h-11 items-center gap-2 border-b border-faint text-sm text-muted hover:border-lime hover:text-lime"
+                      href={item.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span className="live-pip" aria-hidden="true" />
+                      <ExternalLink className="size-4" />
+                      Live
+                    </a>
+                  ) : (
+                    <span className="inline-flex min-h-11 items-center text-sm text-faint">No public site right now</span>
+                  )}
+                  {item.pushedAt ? (
+                    <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-faint" title={item.pushedAt}>
+                      {relTime(item.pushedAt)}
+                    </span>
+                  ) : null}
                 </div>
               </article>
             ))}
@@ -344,6 +337,16 @@ function Home() {
       </footer>
     </div>
   );
+}
+
+function relTime(iso: string) {
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return "";
+  const s = Math.max(0, (Date.now() - then) / 1000);
+  if (s < 3600) return `${Math.max(1, Math.round(s / 60))}m ago`;
+  if (s < 86400) return `${Math.round(s / 3600)}h ago`;
+  const days = Math.round(s / 86400);
+  return days === 1 ? "1d ago" : `${days}d ago`;
 }
 
 function SectionHead({ idx, title }: { idx: string; title: string }) {
