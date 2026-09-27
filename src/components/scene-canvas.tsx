@@ -5,12 +5,15 @@ import { parseCssHex, THEMES, useStudioTheme } from "@/lib/theme";
 type SceneApi = {
   mats: Array<THREE.LineBasicMaterial | THREE.MeshBasicMaterial | THREE.PointsMaterial>;
   scene: THREE.Scene;
+  play: () => void;
+  stop: () => void;
 };
 
 export function SceneCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const apiRef = useRef<SceneApi | null>(null);
   const theme = useStudioTheme((s) => s.theme);
+  const ground = useStudioTheme((s) => s.ground);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -85,7 +88,12 @@ export function SceneCanvas() {
     const particles = new THREE.Points(pGeo, pMat);
     scene.add(particles);
 
-    apiRef.current = { mats: [icoMat, innerMat, pMat], scene };
+    apiRef.current = {
+      mats: [icoMat, innerMat, pMat],
+      scene,
+      play: () => renderer.setAnimationLoop(animate),
+      stop: () => renderer.setAnimationLoop(null),
+    };
 
     const pointer = new THREE.Vector2(0, 0);
     const onPointer = (e: PointerEvent) => {
@@ -150,10 +158,14 @@ export function SceneCanvas() {
     };
 
     const onVis = () => {
-      renderer.setAnimationLoop(document.hidden ? null : animate);
+      const api = apiRef.current;
+      if (!api) return;
+      const show = !document.hidden && useStudioTheme.getState().ground === "orbit";
+      if (show) api.play();
+      else api.stop();
     };
     document.addEventListener("visibilitychange", onVis);
-    renderer.setAnimationLoop(animate);
+    onVis();
 
     return () => {
       renderer.setAnimationLoop(null);
@@ -183,10 +195,21 @@ export function SceneCanvas() {
     api.scene.fog = new THREE.FogExp2(bg, 0.045);
   }, [theme]);
 
+  useEffect(() => {
+    const api = apiRef.current;
+    if (!api) return;
+    if (ground === "orbit" && !document.hidden) api.play();
+    else api.stop();
+  }, [ground]);
+
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-0 h-full w-full"
+      className={
+        ground === "orbit"
+          ? "pointer-events-none fixed inset-0 z-0 h-full w-full opacity-100"
+          : "pointer-events-none fixed inset-0 z-0 h-full w-full opacity-0"
+      }
       aria-hidden="true"
     />
   );

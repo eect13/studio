@@ -192,92 +192,70 @@ html[data-theme="night"] .portrait-theme {
   100% { box-shadow: 0 0 0 7px transparent; }
 }
 
-.trim-field {
+.mark-study {
   position: fixed;
   inset: 0;
-  z-index: 2;
+  z-index: 1;
+  display: grid;
+  place-items: center;
   pointer-events: none;
   color: var(--studio-accent);
 }
 
-.trim-sheet {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+.mark-study[data-off="true"] {
+  visibility: hidden;
 }
 
-.trim-corner {
-  position: absolute;
-  width: min(30vw, 210px);
+.mark-study-svg {
+  width: min(128vw, 118vh);
   height: auto;
   overflow: visible;
 }
-.trim-corner.tl { top: 4.25rem; left: 0.75rem; }
-.trim-corner.tr { top: 4.25rem; right: 0.75rem; transform: scaleX(-1); }
-.trim-corner.bl { bottom: 0.75rem; left: 0.75rem; transform: scaleY(-1); }
-.trim-corner.br { right: 0.75rem; bottom: 0.75rem; transform: scale(-1); }
 
-.trim-field path {
+.study-fill {
+  fill: currentColor;
+  stroke: none;
+  opacity: 0.06;
+}
+
+.study-line {
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.15;
-  stroke-linecap: square;
-  stroke-linejoin: miter;
+  stroke-width: 1.35;
+  stroke-linejoin: round;
+  stroke-linecap: round;
   vector-effect: non-scaling-stroke;
-}
-
-.trim-stroke {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  animation: trim-draw 16s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+  animation: study-draw 26s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+  animation-delay: -8s;
 }
 
-.trim-stroke-dim {
-  opacity: 0.45;
+.study-flip {
+  opacity: 0.42;
+  animation-delay: -9s;
 }
 
-.trim-swap {
-  transform-box: fill-box;
-}
-
-.trim-a {
-  animation: trim-fade 32s ease-in-out infinite;
-}
-.trim-b {
-  animation: trim-fade 32s ease-in-out infinite;
-  animation-delay: -16s;
-}
-
-@keyframes trim-draw {
+@keyframes study-draw {
   0% { stroke-dashoffset: 1; }
-  38% { stroke-dashoffset: 0; }
-  70% { stroke-dashoffset: 0; }
+  42% { stroke-dashoffset: 0; }
+  68% { stroke-dashoffset: 0; }
   100% { stroke-dashoffset: -1; }
 }
 
-@keyframes trim-fade {
-  0%, 6% { opacity: 0; }
-  16%, 42% { opacity: 0.72; }
-  54%, 100% { opacity: 0; }
-}
-
-html.trim-paused .trim-field,
-html.trim-paused .trim-field * {
+html.study-paused .mark-study,
+html.study-paused .mark-study * {
   animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .trim-stroke,
-  .trim-a,
-  .trim-b,
+  .study-line,
   .live-pip {
     animation: none !important;
     stroke-dashoffset: 0 !important;
   }
-  .trim-a { opacity: 0.62 !important; }
-  .trim-b { opacity: 0 !important; }
+  .study-line { opacity: 0.28; }
+  .study-flip { opacity: 0.16 !important; }
 }
 
 @utility font-serif {

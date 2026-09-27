@@ -67,25 +67,33 @@ export const THEMES = {
 export type ThemeId = keyof typeof THEMES;
 export const THEME_IDS = Object.keys(THEMES) as ThemeId[];
 
+export type GroundId = "mark" | "orbit";
+
 type ThemeStore = {
   theme: ThemeId;
+  ground: GroundId;
   setTheme: (id: ThemeId) => void;
+  setGround: (id: GroundId) => void;
 };
 
 export const useStudioTheme = create<ThemeStore>()(
   persist(
     (set) => ({
       theme: "volt",
+      ground: "mark",
       setTheme: (id) => set({ theme: id }),
+      setGround: (id) => set({ ground: id }),
     }),
     {
       name: "studio.theme",
       merge: (persisted, current) => {
         const p = (persisted ?? {}) as Partial<ThemeStore>;
+        const ground = p.ground === "orbit" || p.ground === "mark" ? p.ground : current.ground;
         return {
           ...current,
           ...p,
           theme: p.theme && p.theme in THEMES ? p.theme : current.theme,
+          ground,
         };
       },
     },

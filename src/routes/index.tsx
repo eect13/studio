@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ExternalLink, Github, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { GroundSwitch } from "@/components/ground-switch";
 import { Mark } from "@/components/mark";
+import { MarkStudy } from "@/components/mark-study";
 import { SceneCanvas } from "@/components/scene-canvas";
 import { StudioCursor } from "@/components/studio-cursor";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { TrimField } from "@/components/trim-field";
 import { Button } from "@/components/ui/button";
 import { seedCards, type ProjectCard } from "@/lib/projects";
 import { refreshProjects } from "@/lib/projects-live";
@@ -43,7 +44,7 @@ function Home() {
     <div className="relative min-h-svh overflow-x-clip bg-bg text-fg">
       <StudioCursor />
       <SceneCanvas />
-      <TrimField />
+      <MarkStudy />
       <div
         className="pointer-events-none fixed inset-0 z-[1] opacity-[0.07]"
         style={{
@@ -70,6 +71,7 @@ function Home() {
             </a>
           ))}
         </nav>
+        <GroundSwitch />
         <ThemeSwitcher />
         <button
           type="button"
