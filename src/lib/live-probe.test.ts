@@ -39,9 +39,9 @@ describe("probe", () => {
     assert.equal(status, "up");
   });
 
-  it("passes the team-scoped eect13 Vercel alias", async () => {
+  it("does not treat a -eect13.vercel.app name as owned", async () => {
     serve("<html><head><title>Atrium</title></head></html>");
-    const { status } = await probe("https://atrium-eect13.vercel.app", "Atrium");
-    assert.equal(status, "up");
+    const { status } = await probe("https://x-eect13.vercel.app", "Atrium");
+    assert.equal(status, "unknown");
   });
 });

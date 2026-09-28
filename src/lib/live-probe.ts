@@ -1,4 +1,4 @@
-/** Hosts that live in Eric's own Vercel team (eect13) or Netlify team. */
+/** Hosts Eric actually publishes. A name ending in -eect13.vercel.app is not proof. */
 const OWNED_HOSTS = new Set([
   "atrium-swart-seven.vercel.app",
   "courtwire.netlify.app",
@@ -7,13 +7,10 @@ const OWNED_HOSTS = new Set([
   "eect13.netlify.app",
 ]);
 
-/** Vercel only hands out `<project>-eect13.vercel.app` to the eect13 team. */
-const OWNED_SUFFIX = "-eect13.vercel.app";
-
 export function isOwnedHost(url: string) {
   try {
     const host = new URL(url).hostname.toLowerCase();
-    return OWNED_HOSTS.has(host) || host.endsWith(OWNED_SUFFIX);
+    return OWNED_HOSTS.has(host);
   } catch {
     return false;
   }
