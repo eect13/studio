@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { isOwnedHost, probe } from "@/lib/live-probe";
 import { PROJECT_SEEDS, seedCard, type ProjectCard, type ProjectSeed } from "@/lib/projects";
 
 const TTL_MS = 10 * 60 * 1000;
@@ -89,43 +90,12 @@ async function pickLive(
   const results = await Promise.all(candidates.map(async (url) => ({ url, ...(await probe(url, expect)) })));
   const up = results.find((r) => r.status === "up");
   if (up) return { url: up.url, ok: true, head: up.head };
-  if (results.some((r) => r.status === "unknown")) return { url: candidates[0], ok: true, head: "" };
+  const maybe = results.find((r) => r.status === "unknown" && isOwnedHost(r.url));
+  if (maybe) return { url: maybe.url, ok: true, head: "" };
   return { url: null, ok: false, head: "" };
 }
 
 function versionIn(html: string) {
   const match = html.match(/v(?:<!--\s*-->)?(\d+\.\d+\.\d+)/);
   return match?.[1];
-}
-
-async function probe(url: string, expect: string): Promise<{ status: "up" | "down" | "unknown"; head: string }> {
-  try {
-    const res = await fetch(url, {
-      redirect: "follow",
-      signal: AbortSignal.timeout(5000),
-      headers: { "user-agent": "eric-emerson-studio" },
-    });
-    if (res.status === 404 || res.status >= 500) return { status: "down", head: "" };
-    if (res.url.includes("vercel.com/login") || res.url.includes("vercel.com/sso")) return { status: "down", head: "" };
-    const head = await readHead(res, 8000);
-    const hay = head.toLowerCase();
-    if (hay.includes("vercel.com/login") || hay.includes("deployment is protected")) return { status: "down", head };
-    return { status: hay.includes(expect.toLowerCase()) ? "up" : "down", head };
-  } catch {
-    return { status: "unknown", head: "" };
-  }
-}
-
-async function readHead(res: Response, max: number) {
-  const reader = res.body?.getReader();
-  if (!reader) return (await res.text()).slice(0, max);
-  const dec = new TextDecoder();
-  let out = "";
-  while (out.length < max) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    out += dec.decode(value, { stream: true });
-  }
-  reader.cancel().catch(() => {});
-  return out;
 }

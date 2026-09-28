@@ -8,7 +8,7 @@ export type ProjectSeed = {
   version: string;
   /** Public GitHub repo slug. Null when the repo is private. */
   repo: string | null;
-  /** Case-insensitive snippet that must appear in a live page. */
+  /** Exact `<title>` of the live page. Hosts outside Eric's Vercel/Netlify are never "up". */
   expect: string;
   liveCandidates: string[];
   /** Read `v1.2.3` from the live page when the repo is private. */
