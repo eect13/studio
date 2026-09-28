@@ -95,7 +95,7 @@ export const PROJECT_SEEDS: ProjectSeed[] = [
     version: "1.7.0",
     repo: "potion",
     expect: "Potion",
-    liveCandidates: ["https://potion-eta.vercel.app"],
+    liveCandidates: [],
     pushedAt: "2026-09-27T12:43:07Z",
   },
 ];
