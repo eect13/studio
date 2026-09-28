@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ExternalLink, Github, Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GroundSwitch } from "@/components/ground-switch";
 import { Mark } from "@/components/mark";
 import { MarkStudy } from "@/components/mark-study";
@@ -11,7 +11,18 @@ import { Button } from "@/components/ui/button";
 import { seedCards, type ProjectCard } from "@/lib/projects";
 import { refreshProjects } from "@/lib/projects-live";
 
-export const Route = createFileRoute("/")({ component: Home });
+export const Route = createFileRoute("/")({
+  head: () => ({
+    links: [{ rel: "canonical", href: "https://eect13.netlify.app/" }],
+    meta: [
+      {
+        property: "og:image:alt",
+        content: "Eric Emerson Studio card: ERIC EMERSON, Studio · Design & tech",
+      },
+    ],
+  }),
+  component: Home,
+});
 
 const NAV = [
   { href: "#about", label: "About" },
@@ -25,6 +36,8 @@ function Home() {
   const [open, setOpen] = useState(false);
   const [work, setWork] = useState<ProjectCard[]>(() => seedCards());
   const [synced, setSynced] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     let stop = false;
@@ -39,6 +52,40 @@ function Home() {
       stop = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const menu = menuRef.current;
+    const toggle = toggleRef.current;
+    const items = () =>
+      Array.from(menu?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])") ?? []);
+    items()[0]?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+        toggle?.focus();
+        return;
+      }
+      if (event.key !== "Tab" || !menu) return;
+      const list = items();
+      if (!list.length) return;
+      const first = list[0];
+      const last = list[list.length - 1];
+      const active = document.activeElement;
+      if (event.shiftKey) {
+        if (active === first || !menu.contains(active)) {
+          event.preventDefault();
+          last.focus();
+        }
+      } else if (active === last || !menu.contains(active)) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
     <div className="relative min-h-svh overflow-x-clip bg-bg text-fg">
@@ -74,9 +121,12 @@ function Home() {
         <GroundSwitch />
         <ThemeSwitcher />
         <button
+          ref={toggleRef}
           type="button"
           className="grid size-11 shrink-0 place-items-center rounded-md text-fg xl:hidden"
           aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="studio-phone-menu"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -84,7 +134,14 @@ function Home() {
       </header>
 
       {open ? (
-        <div className="fixed inset-0 z-30 flex flex-col items-center justify-center gap-6 bg-bg/96 px-6 text-2xl xl:hidden">
+        <div
+          ref={menuRef}
+          id="studio-phone-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+          className="fixed inset-0 z-30 flex flex-col items-center justify-center gap-6 bg-bg/96 px-6 text-2xl xl:hidden"
+        >
           {NAV.map((item) => (
             <a key={item.href} href={item.href} onClick={() => setOpen(false)}>
               {item.label}
@@ -93,7 +150,7 @@ function Home() {
         </div>
       ) : null}
 
-      <main id="top" className="relative z-10">
+      <main id="top" inert={open || undefined} className="relative z-10">
         <section className="relative mx-auto flex min-h-svh max-w-6xl flex-col justify-center px-4 pb-16 pt-24 sm:px-8 sm:pt-28">
           <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
             Multimedia arts graduate · Philippines
@@ -333,7 +390,10 @@ function Home() {
         </section>
       </main>
 
-      <footer className="relative z-10 flex flex-wrap justify-between gap-3 border-t border-line px-4 py-6 font-mono text-[11px] uppercase tracking-[0.12em] text-faint sm:px-8">
+      <footer
+        inert={open || undefined}
+        className="relative z-10 flex flex-wrap justify-between gap-3 border-t border-line px-4 py-6 font-mono text-[11px] uppercase tracking-[0.12em] text-faint sm:px-8"
+      >
         <span>© 2026 Eric Emerson Tan</span>
         <span>All rights reserved</span>
       </footer>

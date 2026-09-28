@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://eect13.netlify.app/sitemap.xml
