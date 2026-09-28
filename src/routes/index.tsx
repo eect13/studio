@@ -11,7 +11,20 @@ import { Button } from "@/components/ui/button";
 import { seedCards, type ProjectCard } from "@/lib/projects";
 import { refreshProjects } from "@/lib/projects-live";
 
-export const Route = createFileRoute("/")({ component: Home });
+export const Route = createFileRoute("/")({ loader: firstCards, component: Home });
+
+type FirstCards = { cards: ProjectCard[]; synced: boolean };
+
+/** On the server, render the refreshed versions when the check answers quickly; else the saved seeds. */
+async function firstCards(): Promise<FirstCards> {
+  const saved: FirstCards = { cards: seedCards(), synced: false };
+  if (typeof window !== "undefined") return saved;
+  const late = new Promise<FirstCards>((resolve) => setTimeout(() => resolve(saved), 2500));
+  const fresh = refreshProjects()
+    .then((result) => (result?.cards?.length ? result : saved))
+    .catch(() => saved);
+  return Promise.race([fresh, late]);
+}
 
 const NAV = [
   { href: "#about", label: "About" },
@@ -23,10 +36,12 @@ const NAV = [
 
 function Home() {
   const [open, setOpen] = useState(false);
-  const [work, setWork] = useState<ProjectCard[]>(() => seedCards());
-  const [synced, setSynced] = useState(false);
+  const first = Route.useLoaderData();
+  const [work, setWork] = useState<ProjectCard[]>(() => first.cards);
+  const [synced, setSynced] = useState(first.synced);
 
   useEffect(() => {
+    if (first.synced) return;
     let stop = false;
     refreshProjects()
       .then((result) => {
@@ -38,7 +53,7 @@ function Home() {
     return () => {
       stop = true;
     };
-  }, []);
+  }, [first.synced]);
 
   return (
     <div className="relative min-h-svh overflow-x-clip bg-bg text-fg">
