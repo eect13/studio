@@ -50,6 +50,17 @@
   color-scheme: dark;
 }
 
+/* Atrium light: text on the light ground uses gold-ink and Atrium's faint step;
+   the dark surfaces keep the dark-ground values. */
+[data-app="atrium"][data-atrium-theme="light"] {
+  --studio-fg: #1a1408;
+  --studio-muted: #6f6554;
+}
+[data-app="atrium"][data-atrium-theme="light"] .bg-atrium-surface {
+  --studio-fg: #f3f4ef;
+  --studio-muted: #a89a82;
+}
+
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;

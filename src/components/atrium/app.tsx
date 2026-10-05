@@ -120,9 +120,10 @@ export function AtriumApp() {
         light ? "bg-[#f4efe4] text-[#1a1408]" : "bg-atrium text-fg",
       )}
       data-app="atrium"
+      data-atrium-theme={light ? "light" : "dark"}
     >
       <aside className="hidden w-56 shrink-0 flex-col border-r border-atrium-line p-4 md:flex">
-        <Link to="/" className="mb-6 text-xs font-medium text-gold hover:underline">
+        <Link to="/" className={cn("mb-6 text-xs font-medium hover:underline", light ? "text-gold-ink" : "text-gold")}>
           ← Studio
         </Link>
         <div className="mb-6 flex items-center gap-2">
@@ -158,7 +159,7 @@ export function AtriumApp() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex flex-wrap items-center gap-3 border-b border-atrium-line px-4 py-3">
-          <Link to="/" className="text-xs text-gold md:hidden">
+          <Link to="/" className={cn("text-xs md:hidden", light ? "text-gold-ink" : "text-gold")}>
             Studio
           </Link>
           <h1 className="hidden text-lg font-semibold capitalize md:block">{view}</h1>
