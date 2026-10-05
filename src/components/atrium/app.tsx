@@ -163,7 +163,7 @@ export function AtriumApp() {
           <Link to="/" className={cn("text-xs md:hidden", light ? "text-gold-ink" : "text-gold")}>
             Studio
           </Link>
-          <h1 className="hidden text-lg font-semibold capitalize md:block">{view}</h1>
+          <h1 className="sr-only text-lg font-semibold capitalize md:not-sr-only">{view}</h1>
           <label className="flex min-h-11 min-w-[12rem] flex-1 items-center gap-2 rounded-full border border-atrium-line bg-atrium-surface px-3 text-fg focus-within:border-gold">
             <Command className="size-4 text-gold" />
             <input
@@ -348,34 +348,45 @@ function CalendarView() {
           Add focus block
         </Button>
       </div>
-      <div className="grid grid-cols-7 gap-1 text-center text-xs uppercase text-muted">
-        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-          <div key={d} className="py-2">
-            {d}
+      <div
+        role="table"
+        aria-label={cursor.toLocaleDateString("en-PH", { month: "long", year: "numeric" })}
+        className="grid grid-cols-7 gap-1 text-center text-xs uppercase text-muted"
+      >
+        <div role="row" className="contents">
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
+            <div key={d} role="columnheader" className="py-2">
+              {d}
+            </div>
+          ))}
+        </div>
+        {Array.from({ length: Math.ceil(cells.length / 7) }, (_, w) => (
+          <div key={w} role="row" className="contents">
+            {cells.slice(w * 7, w * 7 + 7).map((d, j) => {
+              const dayEvents =
+                d == null
+                  ? []
+                  : events.filter((e) => {
+                      const x = new Date(e.start);
+                      return x.getFullYear() === year && x.getMonth() === month && x.getDate() === d;
+                    });
+              return (
+                <div
+                  key={w * 7 + j}
+                  role="cell"
+                  className="min-h-20 rounded-md border border-atrium-line bg-atrium-surface p-1 text-left text-xs text-fg"
+                >
+                  <span className="text-muted">{d ?? ""}</span>
+                  {dayEvents.map((e) => (
+                    <p key={e.id} className="mt-1 truncate text-gold">
+                      {e.title}
+                    </p>
+                  ))}
+                </div>
+              );
+            })}
           </div>
         ))}
-        {cells.map((d, i) => {
-          const dayEvents =
-            d == null
-              ? []
-              : events.filter((e) => {
-                  const x = new Date(e.start);
-                  return x.getFullYear() === year && x.getMonth() === month && x.getDate() === d;
-                });
-          return (
-            <div
-              key={i}
-              className="min-h-20 rounded-md border border-atrium-line bg-atrium-surface p-1 text-left text-xs text-fg"
-            >
-              <span className="text-muted">{d ?? ""}</span>
-              {dayEvents.map((e) => (
-                <p key={e.id} className="mt-1 truncate text-gold">
-                  {e.title}
-                </p>
-              ))}
-            </div>
-          );
-        })}
       </div>
       {monthEvents.length ? (
         <Card className="mt-4 sm:hidden">
@@ -492,7 +503,7 @@ function FinanceView() {
         </ul>
       </Card>
       <Card>
-        <h3 className="mb-3 font-semibold">Budgets</h3>
+        <h2 className="mb-3 font-semibold">Budgets</h2>
         <ul className="space-y-3">
           {budgets.map((b) => {
             const used = spent(b.id);
@@ -517,7 +528,7 @@ function FinanceView() {
         </Button>
       </Card>
       <Card className="md:col-span-2">
-        <h3 className="mb-3 font-semibold">Recent</h3>
+        <h2 className="mb-3 font-semibold">Recent</h2>
         <ul className="space-y-2 text-sm">
           {txs.map((t) => (
             <li key={t.id} className="flex justify-between">
@@ -536,20 +547,22 @@ function FinanceView() {
 function NewsView() {
   const { news } = useAtrium();
   return (
-    <ul className="space-y-3">
-      {news.map((n) => (
-        <li key={n.link} className="rounded-xl border border-atrium-line bg-atrium-surface p-4 text-fg">
-          <span className="text-[11px] uppercase tracking-wide text-gold">
-            {n.src} · {n.category}
-          </span>
-          <a href={n.link} target="_blank" rel="noopener noreferrer" className="mt-1 block font-semibold hover:text-gold">
-            {n.title}
-          </a>
-          <p className="mt-1 text-sm text-muted">{n.desc}</p>
-        </li>
-      ))}
+    <>
+      <ul className="space-y-3">
+        {news.map((n) => (
+          <li key={n.link} className="rounded-xl border border-atrium-line bg-atrium-surface p-4 text-fg">
+            <span className="text-[11px] uppercase tracking-wide text-gold">
+              {n.src} · {n.category}
+            </span>
+            <a href={n.link} target="_blank" rel="noopener noreferrer" className="mt-1 block font-semibold hover:text-gold">
+              {n.title}
+            </a>
+            <p className="mt-1 text-sm text-muted">{n.desc}</p>
+          </li>
+        ))}
+      </ul>
       {!news.length ? <p className="text-muted">No headlines cached yet.</p> : null}
-    </ul>
+    </>
   );
 }
 
@@ -557,7 +570,7 @@ function SettingsView() {
   const { modules, toggleModule } = useAtrium();
   return (
     <Card className="max-w-lg">
-      <h3 className="mb-3 font-semibold">Optional racks</h3>
+      <h2 className="mb-3 font-semibold">Optional racks</h2>
       <p className="mb-4 text-sm text-muted">Calendar stays on. Notes, finance, and news can be hidden.</p>
       {(Object.keys(modules) as (keyof typeof modules)[]).map((key) => (
         <label key={key} className="mb-2 flex min-h-11 items-center justify-between">
