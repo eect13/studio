@@ -14,7 +14,7 @@ import {
   SunMoon,
   Wallet,
 } from "lucide-react";
-import { type ReactNode, useEffect, useMemo, useState } from "react";
+import { type CSSProperties, type ReactNode, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { fetchHeadlines, fetchMarket } from "@/lib/atrium/feeds";
 import {
@@ -317,6 +317,12 @@ function CalendarView() {
     for (let d = 1; d <= days; d++) out.push(d);
     return out;
   }, [days, startPad]);
+  const monthEvents = events
+    .filter((e) => {
+      const x = new Date(e.start);
+      return x.getFullYear() === year && x.getMonth() === month;
+    })
+    .sort((a, b) => a.start.localeCompare(b.start));
 
   return (
     <div>
@@ -369,6 +375,20 @@ function CalendarView() {
           );
         })}
       </div>
+      {monthEvents.length ? (
+        <Card className="mt-4 sm:hidden">
+          <ul className="space-y-1 text-sm">
+            {monthEvents.map((e) => (
+              <li key={e.id}>
+                <span className="text-muted">
+                  {new Date(e.start).toLocaleDateString("en-PH", { weekday: "short", day: "numeric" })}
+                </span>{" "}
+                <span className="text-gold">{e.title}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      ) : null}
     </div>
   );
 }
@@ -399,7 +419,7 @@ function NotesView() {
         New note
       </Button>
       <div
-        className="relative mt-4 min-h-[28rem] overflow-hidden rounded-xl border border-atrium-line"
+        className="relative mt-4 min-h-[28rem] overflow-hidden rounded-xl border border-atrium-line max-sm:flex max-sm:flex-col max-sm:gap-3 max-sm:p-3"
         onPointerMove={(e) => {
           if (!drag) return;
           moveNote(drag.id, e.clientX - drag.dx, e.clientY - drag.dy);
@@ -409,15 +429,15 @@ function NotesView() {
         {notes.map((n) => (
           <article
             key={n.id}
-            className="absolute w-44 cursor-grab rounded-md p-3 text-sm text-gold-ink shadow-sm"
-            style={{ left: n.x, top: n.y, background: n.color }}
+            className="w-44 cursor-grab rounded-md p-3 text-sm text-gold-ink shadow-sm sm:absolute sm:left-(--note-x) sm:top-(--note-y)"
+            style={{ "--note-x": `${n.x}px`, "--note-y": `${n.y}px`, background: n.color } as CSSProperties}
             onPointerDown={(e) => {
               const rect = (e.currentTarget.parentElement as HTMLElement).getBoundingClientRect();
               setDrag({ id: n.id, dx: e.clientX - rect.left - n.x, dy: e.clientY - rect.top - n.y });
             }}
           >
             <div
-              className="mb-2 flex gap-1"
+              className="mb-2 flex gap-1 max-sm:hidden"
               role="group"
               aria-label="Move note"
               onPointerDown={(e) => e.stopPropagation()}
