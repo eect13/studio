@@ -163,7 +163,7 @@ export function AtriumApp() {
             Studio
           </Link>
           <h1 className="hidden text-lg font-semibold capitalize md:block">{view}</h1>
-          <label className="flex min-h-11 min-w-[12rem] flex-1 items-center gap-2 rounded-full border border-atrium-line bg-atrium-surface px-3 text-fg">
+          <label className="flex min-h-11 min-w-[12rem] flex-1 items-center gap-2 rounded-full border border-atrium-line bg-atrium-surface px-3 text-fg focus-within:border-gold">
             <Command className="size-4 text-gold" />
             <input
               value={omni}
