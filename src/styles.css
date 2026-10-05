@@ -236,6 +236,14 @@ html[data-theme="night"] .portrait-theme {
   opacity: 0.9;
 }
 
+/* The "Still" ground: the same rest state as prefers-reduced-motion. */
+.mark-study[data-still="true"] .study-line {
+  opacity: 0.45;
+}
+:root:has(.mark-study[data-still="true"]) .live-pip {
+  animation: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .live-pip {
     animation: none !important;

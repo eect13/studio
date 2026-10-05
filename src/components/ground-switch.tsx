@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 const OPTIONS: { id: GroundId; label: string; name: string }[] = [
   { id: "mark", label: "Study", name: "Hourglass study" },
   { id: "orbit", label: "Orbit", name: "Orbit" },
+  { id: "still", label: "Still", name: "Still (no motion)" },
 ];
 
 export function GroundSwitch() {

@@ -7,7 +7,7 @@ const PARTS = MARK_D.split(/(?=M)/).filter((d) => d.startsWith("M"));
 
 export function MarkStudy() {
   const ground = useStudioTheme((s) => s.ground);
-  const on = ground === "mark";
+  const on = ground !== "orbit";
   const runners = useRef<Array<SVGPathElement | null>>([]);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export function MarkStudy() {
       const scrolling = window.scrollY / Math.max(document.body.scrollHeight - window.innerHeight, 1);
       paths.forEach((p, i) => {
         const len = lengths[i];
-        if (reduce) {
+        if (reduce || useStudioTheme.getState().ground === "still") {
           p.style.strokeDasharray = "none";
           p.style.strokeDashoffset = "0";
           return;
@@ -49,6 +49,7 @@ export function MarkStudy() {
       raf = requestAnimationFrame(tick);
     };
     const wake = () => {
+      if (useStudioTheme.getState().ground === "still") paint(performance.now());
       if (!raf && !document.hidden && useStudioTheme.getState().ground === "mark") {
         raf = requestAnimationFrame(tick);
       }
@@ -69,7 +70,12 @@ export function MarkStudy() {
   }, []);
 
   return (
-    <div className="mark-study" data-off={on ? "false" : "true"} aria-hidden="true">
+    <div
+      className="mark-study"
+      data-off={on ? "false" : "true"}
+      data-still={ground === "still" ? "true" : "false"}
+      aria-hidden="true"
+    >
       <svg viewBox={MARK_VIEWBOX} className="mark-study-svg">
         <path className="study-fill" fillRule="evenodd" d={MARK_D} />
         {PARTS.map((d) => (
