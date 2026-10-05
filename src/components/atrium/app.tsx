@@ -1,8 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import {
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
   CalendarDays,
   Command,
   LayoutDashboard,
+  Move,
   Newspaper,
   Settings,
   StickyNote,
@@ -367,9 +372,25 @@ function CalendarView() {
   );
 }
 
+const NUDGE = "size-6 min-h-0 px-0 text-gold-ink";
+const STEPS: Record<string, [number, number]> = {
+  ArrowLeft: [-24, 0],
+  ArrowUp: [0, -24],
+  ArrowDown: [0, 24],
+  ArrowRight: [24, 0],
+};
+const NUDGES: [string, typeof Move, [number, number]][] = [
+  ["left", ArrowLeft, STEPS.ArrowLeft],
+  ["up", ArrowUp, STEPS.ArrowUp],
+  ["down", ArrowDown, STEPS.ArrowDown],
+  ["right", ArrowRight, STEPS.ArrowRight],
+];
+
 function NotesView() {
   const { notes, addNote, moveNote } = useAtrium();
   const [drag, setDrag] = useState<{ id: string; dx: number; dy: number } | null>(null);
+  const nudge = (n: { id: string; x: number; y: number }, [dx, dy]: [number, number]) =>
+    moveNote(n.id, Math.max(0, n.x + dx), Math.max(0, n.y + dy));
 
   return (
     <div>
@@ -394,6 +415,31 @@ function NotesView() {
               setDrag({ id: n.id, dx: e.clientX - rect.left - n.x, dy: e.clientY - rect.top - n.y });
             }}
           >
+            <div
+              className="mb-2 flex gap-1"
+              role="group"
+              aria-label="Move note"
+              onPointerDown={(e) => e.stopPropagation()}
+            >
+              <Button
+                variant="atriumGhost"
+                className={NUDGE}
+                aria-label="Move note with arrow keys"
+                onKeyDown={(e) => {
+                  const step = STEPS[e.key];
+                  if (!step) return;
+                  e.preventDefault();
+                  nudge(n, step);
+                }}
+              >
+                <Move className="size-3.5" />
+              </Button>
+              {NUDGES.map(([label, Icon, step]) => (
+                <Button key={label} variant="atriumGhost" className={NUDGE} aria-label={`Move note ${label}`} onClick={() => nudge(n, step)}>
+                  <Icon className="size-3.5" />
+                </Button>
+              ))}
+            </div>
             {n.text}
           </article>
         ))}
