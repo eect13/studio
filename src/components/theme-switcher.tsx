@@ -34,7 +34,6 @@ export function ThemeSwitcher({ className }: { className?: string }) {
         ref={trigger}
         type="button"
         className="flex h-11 items-center gap-2 rounded-full border border-line bg-surface/80 px-2.5 backdrop-blur-md sm:px-3"
-        aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={`Color theme, ${current.label}`}
         onClick={() => setOpen((v) => !v)}
@@ -49,7 +48,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
       </button>
       {open ? (
         <div
-          role="listbox"
+          role="group"
           aria-label="Color theme"
           className="absolute right-0 top-[calc(100%+6px)] z-50 flex items-center gap-0.5 rounded-full border border-line bg-surface/95 p-1 shadow-lg backdrop-blur-md"
         >
@@ -60,8 +59,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
               <button
                 key={id}
                 type="button"
-                role="option"
-                aria-selected={on}
+                aria-pressed={on}
                 aria-label={t.label}
                 title={t.label}
                 onClick={() => {

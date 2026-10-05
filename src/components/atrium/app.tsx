@@ -143,6 +143,7 @@ export function AtriumApp() {
                 key={n.id}
                 type="button"
                 onClick={() => setView(n.id)}
+                aria-current={view === n.id ? "page" : undefined}
                 className={cn(
                   "flex min-h-11 items-center gap-2 rounded-md px-3 text-left text-sm",
                   view === n.id ? "bg-gold text-gold-ink" : "hover:bg-atrium-surface",
@@ -192,6 +193,7 @@ export function AtriumApp() {
               key={n.id}
               type="button"
               onClick={() => setView(n.id)}
+              aria-current={view === n.id ? "page" : undefined}
               className={cn(
                 "min-h-10 shrink-0 rounded-full px-3 text-sm",
                 view === n.id ? "bg-gold text-gold-ink" : "text-muted",
