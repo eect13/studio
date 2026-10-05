@@ -7,6 +7,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
   const setTheme = useStudioTheme((s) => s.setTheme);
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
   const current = THEMES[theme];
 
   useEffect(() => {
@@ -15,7 +16,9 @@ export function ThemeSwitcher({ className }: { className?: string }) {
       if (!root.current?.contains(e.target as Node)) setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key !== "Escape") return;
+      if (root.current?.contains(document.activeElement)) trigger.current?.focus();
+      setOpen(false);
     };
     document.addEventListener("pointerdown", onPointer);
     document.addEventListener("keydown", onKey);
@@ -28,6 +31,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
   return (
     <div ref={root} className={cn("relative shrink-0", className)}>
       <button
+        ref={trigger}
         type="button"
         className="flex h-11 items-center gap-2 rounded-full border border-line bg-surface/80 px-2.5 backdrop-blur-md sm:px-3"
         aria-haspopup="listbox"
@@ -63,6 +67,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
                 onClick={() => {
                   setTheme(id as ThemeId);
                   setOpen(false);
+                  trigger.current?.focus();
                 }}
                 className="grid size-11 place-items-center"
               >
