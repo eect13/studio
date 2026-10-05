@@ -157,7 +157,7 @@ export function AtriumApp() {
             Studio
           </Link>
           <h1 className="hidden text-lg font-semibold capitalize md:block">{view}</h1>
-          <label className="flex min-h-11 min-w-[12rem] flex-1 items-center gap-2 rounded-full border border-atrium-line bg-atrium-surface px-3">
+          <label className="flex min-h-11 min-w-[12rem] flex-1 items-center gap-2 rounded-full border border-atrium-line bg-atrium-surface px-3 text-fg">
             <Command className="size-4 text-gold" />
             <input
               value={omni}
@@ -217,7 +217,7 @@ export function AtriumApp() {
 
 function Card({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <section className={cn("rounded-xl border border-atrium-line bg-atrium-surface p-4", className)}>
+    <section className={cn("rounded-xl border border-atrium-line bg-atrium-surface p-4 text-fg", className)}>
       {children}
     </section>
   );
@@ -351,7 +351,7 @@ function CalendarView() {
           return (
             <div
               key={i}
-              className="min-h-20 rounded-md border border-atrium-line bg-atrium-surface p-1 text-left text-xs"
+              className="min-h-20 rounded-md border border-atrium-line bg-atrium-surface p-1 text-left text-xs text-fg"
             >
               <span className="text-muted">{d ?? ""}</span>
               {dayEvents.map((e) => (
@@ -469,7 +469,7 @@ function NewsView() {
   return (
     <ul className="space-y-3">
       {news.map((n) => (
-        <li key={n.link} className="rounded-xl border border-atrium-line bg-atrium-surface p-4">
+        <li key={n.link} className="rounded-xl border border-atrium-line bg-atrium-surface p-4 text-fg">
           <span className="text-[11px] uppercase tracking-wide text-gold">
             {n.src} · {n.category}
           </span>
