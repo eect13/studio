@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@theme {
+@theme inline {
   --color-bg: var(--studio-bg);
   --color-surface: var(--studio-surface);
   --color-elevated: var(--studio-elevated);
