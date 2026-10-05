@@ -117,7 +117,7 @@ function Home() {
         aria-hidden="true"
       />
 
-      <header className="fixed inset-x-0 top-0 z-40 flex items-center gap-2 bg-gradient-to-b from-bg/90 to-transparent px-4 py-3 sm:px-8">
+      <header className="fixed inset-x-0 top-0 z-40 flex flex-wrap items-center gap-2 bg-gradient-to-b from-bg/90 to-transparent px-4 py-3 sm:px-8">
         <a href="#top" className="mr-auto flex min-w-0 items-center gap-3" aria-label="Eric Emerson Studio">
           <Mark className="h-10 w-9 shrink-0" />
           <span className="hidden flex-col leading-tight sm:flex">
@@ -171,7 +171,7 @@ function Home() {
           <p className="mb-5 w-fit bg-bg/96 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
             Multimedia arts graduate · Philippines
           </p>
-          <h1 className="w-fit bg-bg/96 text-[clamp(2.6rem,12vw,8.5rem)] font-extrabold uppercase leading-[0.86] tracking-[-0.05em]">
+          <h1 className="w-fit bg-bg/96 text-[min(clamp(2.6rem,12vw,8.5rem),18vw)] font-extrabold uppercase leading-[0.86] tracking-[-0.05em]">
             <span className="block">Eric</span>
             <span className="hero-glow block text-lime">Emerson</span>
           </h1>
