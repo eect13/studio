@@ -168,14 +168,14 @@ function Home() {
 
       <main id="top" inert={open || undefined} className="relative z-10">
         <section className="relative mx-auto flex min-h-svh max-w-6xl flex-col justify-center px-4 pb-16 pt-24 sm:px-8 sm:pt-28">
-          <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+          <p className="mb-5 w-fit bg-bg/96 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
             Multimedia arts graduate · Philippines
           </p>
-          <h1 className="text-[clamp(2.6rem,12vw,8.5rem)] font-extrabold uppercase leading-[0.86] tracking-[-0.05em]">
+          <h1 className="w-fit bg-bg/96 text-[clamp(2.6rem,12vw,8.5rem)] font-extrabold uppercase leading-[0.86] tracking-[-0.05em]">
             <span className="block">Eric</span>
             <span className="hero-glow block text-lime">Emerson</span>
           </h1>
-          <p className="mt-7 max-w-md text-muted">
+          <p className="mt-7 w-fit max-w-md bg-bg/96 text-muted">
             One personal mark. A few tools I open myself. A printer I am still learning. I under-promise on purpose.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
