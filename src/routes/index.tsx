@@ -168,14 +168,14 @@ function Home() {
 
       <main id="top" inert={open || undefined} className="relative z-10">
         <section className="relative mx-auto flex min-h-svh max-w-6xl flex-col justify-center px-4 pb-16 pt-24 sm:px-8 sm:pt-28">
-          <p className="mb-5 w-fit bg-bg/96 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+          <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
             Multimedia arts graduate · Philippines
           </p>
-          <h1 className="w-fit bg-bg/96 text-[min(clamp(2.6rem,12vw,8.5rem),18vw)] font-extrabold uppercase leading-[0.86] tracking-[-0.05em]">
+          <h1 className="text-[min(clamp(2.6rem,12vw,8.5rem),18vw)] font-extrabold uppercase leading-[0.86] tracking-[-0.05em]">
             <span className="block">Eric</span>
             <span className="hero-glow block text-lime">Emerson</span>
           </h1>
-          <p className="mt-7 w-fit max-w-md bg-bg/96 text-muted">
+          <p className="mt-7 max-w-md text-muted">
             One personal mark. Graphic design, and a few tools I put together so I can use them.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -189,11 +189,17 @@ function Home() {
           <SectionHead idx="01" title="About" />
           <div className="grid overflow-hidden rounded-xl border border-line bg-surface/90 md:grid-cols-[minmax(0,280px)_1fr] lg:grid-cols-[minmax(0,320px)_1fr]">
             <figure className="relative flex items-end justify-center px-5 pt-8 md:px-6 md:pt-10">
-              <div
-                className="portrait-theme relative z-[1]"
-                role="img"
-                aria-label="Eric Emerson Tan, geometric vector portrait"
-              />
+              <div className="portrait-stage">
+                <img
+                  src="/portrait.png?v=6"
+                  alt="Eric Emerson Tan, geometric vector portrait"
+                  width={1152}
+                  height={1709}
+                  className="portrait-art"
+                  decoding="async"
+                />
+                <div className="portrait-wash" aria-hidden="true" />
+              </div>
             </figure>
             <div className="p-5 sm:p-8">
               <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
@@ -230,27 +236,26 @@ function Home() {
             {synced ? " Checked just now." : " Showing the last versions I saved, until the check finishes."}
           </p>
 
-          <article
-            data-work="mark"
-            className="mb-5 grid items-center gap-6 rounded-xl border border-line bg-surface/90 p-6 sm:grid-cols-[minmax(0,160px)_1fr] sm:p-8"
-          >
-            <Mark className="mx-auto h-32 w-28 sm:h-40 sm:w-36" />
-            <div>
-              <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-lime">
-                00 · Personal mark
-              </p>
-              <h3 className="mb-2 text-2xl font-semibold tracking-tight">Hourglass</h3>
-              <p className="text-muted">
-                One ambigram. Eye as counter, e in the lens. The logo I use.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Tag>Logo</Tag>
-                <Tag>Ambigram</Tag>
-              </div>
-            </div>
-          </article>
-
           <div className="work-bento">
+            <article
+              data-work="mark"
+              className="grid content-center items-center gap-6 rounded-xl border border-line bg-surface/90 p-6 sm:grid-cols-[minmax(0,160px)_1fr] sm:p-8 lg:grid-cols-1"
+            >
+              <Mark className="h-32 w-28 sm:h-40 sm:w-36 lg:h-44 lg:w-40" />
+              <div>
+                <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-lime">
+                  00 · Personal mark
+                </p>
+                <h3 className="mb-2 text-2xl font-semibold tracking-tight">Hourglass</h3>
+                <p className="text-muted">
+                  One ambigram. Eye as counter, e in the lens. The logo I use.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Tag>Logo</Tag>
+                  <Tag>Ambigram</Tag>
+                </div>
+              </div>
+            </article>
             {work.map((item) => (
               <article
                 key={item.id}
