@@ -117,22 +117,20 @@
 }
 
 .portrait-theme {
-  transition: filter 220ms ease;
+  height: 18rem;
+  width: auto;
+  max-width: 100%;
+  aspect-ratio: 1152 / 1709;
+  background: color-mix(in oklab, var(--studio-accent) 74%, var(--studio-fg) 26%);
+  -webkit-mask: url("/portrait.png?v=6") center bottom / contain no-repeat;
+  mask: url("/portrait.png?v=6") center bottom / contain no-repeat;
+  transition: background-color 220ms ease;
 }
-html[data-theme="volt"] .portrait-theme {
-  filter: saturate(1.08) contrast(1.04);
+@media (min-width: 640px) {
+  .portrait-theme { height: 24rem; }
 }
-html[data-theme="tide"] .portrait-theme {
-  filter: hue-rotate(18deg) saturate(1.08) contrast(1.03);
-}
-html[data-theme="ember"] .portrait-theme {
-  filter: hue-rotate(-26deg) saturate(1.12) contrast(1.03);
-}
-html[data-theme="paper"] .portrait-theme {
-  filter: saturate(0.9) contrast(1.06) brightness(1.03);
-}
-html[data-theme="night"] .portrait-theme {
-  filter: saturate(0.55) contrast(1.06);
+@media (min-width: 768px) {
+  .portrait-theme { height: 28rem; }
 }
 
 .studio-cursor-ring,
@@ -218,7 +216,7 @@ html[data-theme="night"] .portrait-theme {
 }
 
 .mark-study-svg {
-  width: min(128vw, 118vh);
+  width: min(108vw, calc(96vh * 0.879));
   height: auto;
   overflow: visible;
 }
@@ -233,7 +231,7 @@ html[data-theme="night"] .portrait-theme {
 .study-line {
   fill: none;
   stroke: currentColor;
-  stroke-width: 2.4;
+  stroke-width: var(--study-stroke, 2.4);
   stroke-linejoin: round;
   stroke-linecap: round;
   shape-rendering: geometricPrecision;

@@ -7,7 +7,7 @@ Live: [eect13.netlify.app](https://eect13.netlify.app)
 ## What’s in here
 
 - **Studio** — hourglass study (default) or the orbit field, theme palettes, vector portrait
-- **Work** — Hourglass mark, Atrium, Font Manager, Finance Manager, Potion, CourtWire. Public versions refresh from GitHub.
+- **Work** — Hourglass mark, plus Atrium, CourtWire, Font Manager, and Finance Manager, all still in progress. Public versions refresh from GitHub.
 - **Atrium** (`/atrium`) — local-first desk (calendar, notes, finance, news)
 
 ## Stack

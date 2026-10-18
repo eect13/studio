@@ -41,7 +41,7 @@ async function firstCards(): Promise<FirstCards> {
 const NAV = [
   { href: "#about", label: "About" },
   { href: "#work", label: "Work" },
-  { href: "#studio", label: "Practice" },
+  { href: "#studio", label: "Making" },
   { href: "#life", label: "Off-screen" },
   { href: "#hello", label: "Say hello" },
 ];
@@ -176,7 +176,7 @@ function Home() {
             <span className="hero-glow block text-lime">Emerson</span>
           </h1>
           <p className="mt-7 w-fit max-w-md bg-bg/96 text-muted">
-            One personal mark. A few tools I open myself. A printer I am still learning. I under-promise on purpose.
+            One personal mark. Graphic design, and a few tools I put together so I can use them.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
@@ -189,19 +189,15 @@ function Home() {
           <SectionHead idx="01" title="About" />
           <div className="grid overflow-hidden rounded-xl border border-line bg-surface/90 md:grid-cols-[minmax(0,280px)_1fr] lg:grid-cols-[minmax(0,320px)_1fr]">
             <figure className="relative flex items-end justify-center px-5 pt-8 md:px-6 md:pt-10">
-              <img
-                src="/portrait.png?v=6"
-                alt="Eric Emerson Tan, geometric vector portrait"
-                width={1152}
-                height={1709}
-                className="portrait-theme relative z-[1] mx-auto h-auto max-h-72 w-full max-w-[220px] object-contain object-bottom sm:max-h-96 sm:max-w-[260px] md:max-h-[28rem] md:max-w-none"
-                crossOrigin="anonymous"
-                decoding="async"
+              <div
+                className="portrait-theme relative z-[1]"
+                role="img"
+                aria-label="Eric Emerson Tan, geometric vector portrait"
               />
             </figure>
             <div className="p-5 sm:p-8">
               <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
-                Philippines · still learning
+                Philippines · design and code
               </p>
               <h3 className="mb-4 text-2xl font-semibold tracking-tight sm:text-3xl">
                 I like making things a little{" "}
@@ -209,19 +205,17 @@ function Home() {
               </h3>
               <p className="mb-3 text-muted">
                 Multimedia Arts graduate, working from home in the Philippines. I have one ambigram:
-                the hourglass in the header. That is my personal logo. Not a client set, and not a
-                studio roster.
+                the hourglass in the header. That is my personal logo.
               </p>
               <p className="text-muted">
-                The tools are things I open myself. Atrium is the desk, on Manila time. CourtWire is
-                a fantasy basketball sheet for the 2026–27 season — I am still learning the numbers.
-                I practice SVG. I run a Creality K2 Pro as a beginner: test prints, bad slicer
-                settings, and scrap. Version numbers below are just what those apps say today.
+                I do graphic design, and I vibe-code the tools I want open. Atrium is the desk, on
+                Manila time. CourtWire is a fantasy basketball sheet for the 2026–27 season. Font
+                Manager and Finance Manager sit next to those. They are in progress.
               </p>
               <ul className="mt-6 grid grid-cols-2 gap-4 text-sm">
                 <Fact label="Identity" value="One mark — mine" />
-                <Fact label="Printer" value="K2 Pro · beginner" />
-                <Fact label="Learning" value="SVG, Tauri, TypeScript" />
+                <Fact label="Design" value="Graphic design" />
+                <Fact label="Tools" value="Four apps, in progress" />
                 <Fact label="Timezone" value="Asia / Manila" />
               </ul>
             </div>
@@ -231,7 +225,7 @@ function Home() {
         <section id="work" className="mx-auto max-w-6xl px-4 py-20 sm:px-8 sm:py-24">
           <SectionHead idx="02" title="Selected work" />
           <p className="mb-8 max-w-xl text-muted">
-            One identity piece. Five things I actually open. Public versions refresh from GitHub
+            One identity piece. Four tools I use while I build them. Versions refresh from GitHub
             when this page loads.
             {synced ? " Checked just now." : " Showing the last versions I saved, until the check finishes."}
           </p>
@@ -247,11 +241,10 @@ function Home() {
               </p>
               <h3 className="mb-2 text-2xl font-semibold tracking-tight">Hourglass</h3>
               <p className="text-muted">
-                One ambigram. Eye as counter, e in the lens. That is the identity work so far — the
-                logo I live with, not a branding practice.
+                One ambigram. Eye as counter, e in the lens. The logo I use.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <Tag>SVG</Tag>
+                <Tag>Logo</Tag>
                 <Tag>Ambigram</Tag>
               </div>
             </div>
@@ -266,6 +259,7 @@ function Home() {
               >
                 <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-lime">
                   {item.n} · {item.kicker} · v{item.version}
+                  <span className="text-faint"> · In progress</span>
                 </p>
                 <h3 className="mb-2 text-2xl font-semibold tracking-tight">{item.title}</h3>
                 <p className="text-muted">{item.body}</p>
@@ -316,22 +310,22 @@ function Home() {
         </section>
 
         <section id="studio" className="mx-auto max-w-6xl px-4 py-20 sm:px-8 sm:py-24">
-          <SectionHead idx="03" title="What I’m practicing" />
+          <SectionHead idx="03" title="How I work" />
           <div className="mb-5 grid gap-5 md:grid-cols-2">
             <article className="rounded-xl border border-line bg-surface/90 p-6">
-              <h3 className="mb-4 text-2xl font-semibold">On screen</h3>
+              <h3 className="mb-4 text-2xl font-semibold">Graphic design</h3>
               <ol className="list-decimal space-y-3 pl-5 text-muted marker:font-mono marker:text-lime">
-                <li>Keeping the hourglass readable when it gets small.</li>
-                <li>Cleaner SVG curves. I still fight nodes.</li>
-                <li>Exports with a true transparent background — no leftover halo.</li>
+                <li>One logo so far, the hourglass, plus type and layout when a page needs them.</li>
+                <li>I like it a little cleaner than yesterday. That is the pace.</li>
+                <li>Not a client list. The mark is mine.</li>
               </ol>
             </article>
             <article className="rounded-xl border border-line bg-surface/90 p-6">
-              <h3 className="mb-4 text-2xl font-semibold">On the printer</h3>
+              <h3 className="mb-4 text-2xl font-semibold">The tools</h3>
               <ol className="list-decimal space-y-3 pl-5 text-muted marker:font-mono marker:text-lime">
-                <li>Beginner on a Creality K2 Pro. I am not a pro.</li>
-                <li>Slicer settings, infill tests, and prints that fail.</li>
-                <li>Learning to keep the machine in tune, one job at a time.</li>
+                <li>Atrium, CourtWire, Font Manager, and Finance Manager.</li>
+                <li>I vibe-code them because I want to use them.</li>
+                <li>They are in progress. I change them when I need something.</li>
               </ol>
             </article>
           </div>
@@ -339,17 +333,17 @@ function Home() {
             <Study
               title="The hourglass"
               kicker="The one mark"
-              body="My only ambigram so far. Personal logo. Practice in negative space — not a catalog."
+              body="One ambigram. Personal logo. Eye as counter, e in the lens."
             />
             <Study
-              title="Cleaner curves"
-              kicker="SVG practice"
-              body="Trying to make paths that still look sharp at 16 pixels. Most days I redo the last node."
+              title="Graphic design"
+              kicker="Pages and type"
+              body="Layout, type, and the mark. That is the design work."
             />
             <Study
-              title="First prints"
-              kicker="K2 Pro · beginner"
-              body="Turning a vector into plastic. Infill, temperature, and a lot of scrap. That’s the level."
+              title="Four apps"
+              kicker="In progress"
+              body="Atrium, CourtWire, Font Manager, Finance Manager. Built so I can open them."
             />
           </div>
         </section>
@@ -363,7 +357,11 @@ function Home() {
             />
             <LifeCard
               title="Music"
-              body="Work soundtrack leans electronic and easy — Disclosure, Satin Jackets, Post Malone."
+              body="Mostly electronic, with some Post Malone. Disclosure and Satin Jackets stay on."
+            />
+            <LifeCard
+              title="Prints"
+              body="A Creality K2 Pro at home. I run a test print now and then."
             />
             <LifeCard
               title="Racquet sports"
@@ -379,7 +377,7 @@ function Home() {
         <section id="hello" className="mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-8 sm:pb-20 sm:pt-12">
           <SectionHead idx="05" title="Say hello" />
           <p className="mb-6 max-w-[28ch] text-3xl font-semibold tracking-tight sm:text-4xl">
-            If you want to talk about a mark, a small tool, or a print I’m still learning —{" "}
+            If you want to talk about a mark, a layout, or one of the tools —{" "}
             <em className="font-serif font-normal italic text-lime">write.</em>
           </p>
           <div className="flex flex-wrap gap-x-8 gap-y-3 text-lg">

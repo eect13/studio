@@ -17,7 +17,13 @@ export function MarkStudy() {
     const pointer = { x: 0, y: 0 };
 
     const paint = (now: number) => {
+      const svg = paths[0]?.ownerSVGElement;
+      const width = svg?.getBoundingClientRect().width || 1;
+      const scale = width / 733.5;
+      const stroke = Math.min(12, Math.max(1.7, 4.6 / scale));
+      svg?.style.setProperty("--study-stroke", String(stroke));
       const scrolling = window.scrollY / Math.max(document.body.scrollHeight - window.innerHeight, 1);
+      const period = 10000 + Math.min(scale, 2.2) * 4200;
       paths.forEach((p, i) => {
         const len = lengths[i];
         if (reduce || useStudioTheme.getState().ground === "still") {
@@ -25,8 +31,9 @@ export function MarkStudy() {
           p.style.strokeDashoffset = "0";
           return;
         }
-        const dash = len * 0.22;
-        const phase = (now / 14000 + i * 0.33 + pointer.x * 0.07 + pointer.y * 0.04 + scrolling * 0.2) % 1;
+        const dash = len * (0.14 + Math.min(scale, 1.6) * 0.05);
+        const phase =
+          (now / period + i * 0.33 + pointer.x * 0.08 + pointer.y * 0.05 + scrolling * 0.25) % 1;
         const along = ((phase % 1) + 1) % 1;
         p.style.strokeDasharray = `${dash} ${Math.max(len - dash, 1)}`;
         p.style.strokeDashoffset = `${-along * len}`;
@@ -57,6 +64,7 @@ export function MarkStudy() {
 
     paint(performance.now());
     window.addEventListener("pointermove", onPointer, { passive: true });
+    window.addEventListener("resize", wake);
     document.addEventListener("visibilitychange", wake);
     const unsub = useStudioTheme.subscribe(wake);
     wake();
@@ -64,6 +72,7 @@ export function MarkStudy() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("pointermove", onPointer);
+      window.removeEventListener("resize", wake);
       document.removeEventListener("visibilitychange", wake);
       unsub();
     };
